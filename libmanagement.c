@@ -48,7 +48,6 @@ void searchbook(short key, char *str)			/* To search book according to title, au
 			if(strstr(p->title, str))
 			{
 				display(p);
-			//	printf("\n");
 				i++;
 			}
 						
@@ -58,7 +57,6 @@ void searchbook(short key, char *str)			/* To search book according to title, au
 			if(strstr(p->author, str))
 			{
 				display(p);
-			//	printf("\n");
 				i++;
 			}
 		}
@@ -67,7 +65,6 @@ void searchbook(short key, char *str)			/* To search book according to title, au
 			if(strstr(p->subject, str))
 			{
 				display(p);
-			//	printf("\n");
 				i++;
 			}
 		}
@@ -76,9 +73,8 @@ void searchbook(short key, char *str)			/* To search book according to title, au
 			if(atoi(str) == p->code)
 			{
 				display(p);
-			//	printf("\n");
 				i++;
-				break;
+				break;		/* Since book code is unique */
 			}
 		}
 	}
@@ -552,7 +548,7 @@ void displayrec(student *s)			/* To display a student record on screen */
 	printf("%d\t%s\t%d\t%d %d %d\t%d:%d\t%s\t%d %d %d\t%d:%d\n", s->mis, s->name, s->bookcode, s->record.bor_date.date, s->record.bor_date.month, s->record.bor_date.year, s->record.bor_timing.hours, s->record.bor_timing.mins, s->record.status, s->record.ret_date.date, s->record.ret_date.month, s->record.ret_date.year, s->record.ret_timing.hours, s->record.ret_timing.mins);
 	return;
 }
-
+https://github.com/ypk4/libmanagement.git
 int myfprintf2(FILE *fp, student *s)		/* To write student record in student records' file */
 {
 	int m;
