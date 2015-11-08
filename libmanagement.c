@@ -1,4 +1,22 @@
-/* Library management */
+/*****************************************************************************
+ * Library Management
+ * Copyright (C) 2015 Kulkarni Yogiraj Purushottam
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+******************************************************************************/
+
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
@@ -13,7 +31,7 @@ int addbook(book *p)					/* To add a new book record */
 	union int_or_str var;
 	int num;
 
-	var.code = p->code;
+	var.integer = p->code;
 	b = searchbook(CODE, var, &num);
 	if(b)
 	{
@@ -25,7 +43,7 @@ int addbook(book *p)					/* To add a new book record */
 	if(!fp)
 	{
 		fp = fopen("bookrecord.txt", "a");
-		fprintf(fp, "Code\tTitle\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
+		fprintf(fp, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
 	}
 	if(fp)
 	{
@@ -39,10 +57,9 @@ int addbook(book *p)					/* To add a new book record */
 
 book* searchbook(short key, union int_or_str var, int *num)		/* To search book according to title, author, subject or code */
 {
-	int i = 0, currsize = 128;
+	int i = 0;
 	char s[1028];
-	book *b = (book *) malloc(currsize * sizeof(book));
-	book *bnew;
+	book *b = (book *) malloc(128 * sizeof(book));
 	book *p = (book *) malloc(sizeof(book));
 	*num = 0;
 	
@@ -81,18 +98,12 @@ book* searchbook(short key, union int_or_str var, int *num)		/* To search book a
 		}
 		if(key == CODE)
 		{
-			if(var.code == p->code)
+			if(var.integer == p->code)
 			{
 				b[(*num)++] = *p;
 				i++;
 				break;		/* Since book code is unique */
 			}
-		}
-		if(*num == currsize)
-		{
-			bnew = (book *) realloc(b, (2 * currsize) * sizeof(book));
-			currsize *= 2;
-			b = bnew;
 		}
 	}
 	free(p);
@@ -130,7 +141,7 @@ int editcopies(int code, int number)			/* To edit number of copies of an existin
 	b[index].avail_copies += number;
 	
 	fp = fopen("bookrecord.txt", "w");
-	fprintf(fp, "Code\tTitle\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
+	fprintf(fp, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
 	for(i = 0; i < n; i++)
 		myfprintf(fp, &b[i]);
 	fclose(fp);
@@ -163,7 +174,7 @@ int deletebook(int code)				/* To delete a book record from library (Because of 
 		return 0;
 	
 	fp = fopen("bookrecord.txt", "w");
-	fprintf(fp, "Code\tTitle\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
+	fprintf(fp, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
 	for(i = 0; i < n; i++)
 	{
 		if(i == index)
@@ -238,11 +249,6 @@ int sortbook(int key)					/* To sort book records according to code, subject, au
 				if(strcmp(b[j].author, b[j+1].author) > 0)
 				{
 					swapbook(b, j, j+1);					
-	fp = fopen("bookrecord.txt", "w");
-	fprintf(fp, "Code\tTitle\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
-	for(i = 0; i < n; i++)
-		myfprintf(fp, &b[i]);
-	fclose(fp);
 					cnt++;
 				}
 			}
@@ -269,18 +275,12 @@ int sortbook(int key)					/* To sort book records according to code, subject, au
 	}
 	
 	fp = fopen("bookrecord.txt", "w");
-	fprintf(fp, "Code\tTitle\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
+	fprintf(fp, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\tPrice\tShelfNo\tCopies\n");
 	for(i = 0; i < n; i++)
 		myfprintf(fp, &b[i]);
 	fclose(fp);
 	return 1;				
 }
-
-void display(book *p)					/* To display a book record on screen */
-{
-	printf("%d\t%s\t%s\t%s\t%d\t%d\t%d\n", p->code, p->title, p->author, p->subject, p->price, p->shelf_num, p->avail_copies);	
-}
-
 
 int myfprintf(FILE *fp, book *p)		/* To write a book record into book records' file */
 {
@@ -314,24 +314,26 @@ void swapbook(book *b, int i, int j)		/* To swap two books in array.. used in so
 	b[j] = tmp;
 }
 
-/* Student book issue record managing functions :- */
-int addissue(borrower *s, short borrow)				/* To add new book issue record from student/faculty */
+/* Borrower book issue record managing functions :- */
+int addissue(issuerecord *s, short borrow)				/* To add new book issue record from student/faculty */
 {
 	struct tm *t;
 	time_t rawtime;			/* Calender time in seconds */
 	FILE *fp, *fpr;
+	union int_or_str var;
 	int i = 0, index = -1, number = 0;
 	char st[1028];
 	book b[MAXSIZE];
-	borrower *p;
+	issuerecord *p;
 
 	fpr = fopen("bookrecord.txt", "r");
 	if(!fpr)
 		return 0;
 
+	var.integer = s->mis;
 	if(borrow == STUDENT)
 	{
-		p = search_record(s->mis, MIS, STUDENT, &number);
+		p = search_record(var, MIS, STUDENT, &number);
 		if(number >= ST_BOOKS)		/* If borrower already has issued max no of permissible books */
 		{
 			free(p);			
@@ -340,7 +342,7 @@ int addissue(borrower *s, short borrow)				/* To add new book issue record from 
 	}			
 	else if(borrow == FACULTY)
 	{
-		p = search_record(s->mis, MIS, FACULTY, &number);
+		p = search_record(var, MIS, FACULTY, &number);
 		if(number >= FAC_BOOKS)
 		{
 			free(p);
@@ -422,7 +424,7 @@ struct fine* returned(int mis, int code, char status, short borrow)	/* To edit s
 	union int_or_str var;
 	int i = 0, n = 0, index = -1, number;
 	struct fine *f;
-	borrower s[MAXSIZE];
+	issuerecord s[MAXSIZE];
 	book *p;
 	
 	f = (struct fine*) malloc(sizeof(struct fine));
@@ -467,7 +469,7 @@ struct fine* returned(int mis, int code, char status, short borrow)	/* To edit s
 	else if(status == 'b')
 	{
 		strcpy(s[index].record.status, "damaged/lost");
-		var.code = code;
+		var.integer = code;
 		p = searchbook(CODE, var, &number);
 		f->damage = p->price * (1 + PENULTY);	/* Damage fine = Price of book + Penulty(=15% of price) */
 	}
@@ -500,16 +502,15 @@ struct fine* returned(int mis, int code, char status, short borrow)	/* To edit s
 	return f;
 }
 
-borrower* search_record(int key, int state, short borrow, int *num)	/* To search issue record according to student mis or book code */
+issuerecord* search_record(union int_or_str var, int state, short borrow, int *num)	/* To search issue record according borrower to mis or book code */
 {
-	borrower *s, *b, *bnew;
-	int currsize = 64;
+	issuerecord *s, *b;
 	char st[1028];
 	FILE *fp;
 	
 	*num = 0;
-	b = (borrower *) malloc(currsize * sizeof(borrower));	
-	s = (borrower *) malloc(sizeof(borrower));
+	b = (issuerecord *) malloc(64 * sizeof(issuerecord));	
+	s = (issuerecord *) malloc(sizeof(issuerecord));
 
 	if(borrow == STUDENT)
 		fp = fopen("studentrecord.txt", "r");
@@ -524,19 +525,23 @@ borrower* search_record(int key, int state, short borrow, int *num)	/* To search
 		mysscanf2(st, s);
 		if(state == MIS)
 		{
-			if(s->mis == key)
+			if(s->mis == var.integer)
 				b[(*num)++] = *s;
 		}	
 		else if(state == BOOKCODE)
 		{
-			if(s->bookcode == key)
+			if(s->bookcode == var.integer)
 				b[(*num)++] = *s;
 		}
-		if(*num == currsize)
+		else if(state == BOOKCODE_ISSUED)
 		{
-			bnew = (borrower *) realloc(b, (2 * currsize) * sizeof(borrower));
-			currsize *= 2;
-			b = bnew;
+			if((s->bookcode == var.integer) && ((strcmp((s->record).status, "issued") == 0)))
+				b[(*num)++] = *s;
+		}
+		else if(state == NAME)
+		{
+			if(strstr(s->name, var.str))
+				b[(*num)++] = *s;
 		}
 	}
 	fclose(fp);
@@ -546,9 +551,55 @@ borrower* search_record(int key, int state, short borrow, int *num)	/* To search
 	return b;
 }
 
+issuerecord* longtimeissue(int *n, short borrow)       /*To get informationn about issue records exceeding due date by tolerarable no of days*/
+{
+	issuerecord *b, s;
+	FILE *fp;
+	struct tm t1;
+	int tolerance;
+	time_t rawtime1, rawtime2;
+	char st[1028];
+	long diff;
+	
+	*n = 0;
+	b = (issuerecord *) malloc(64 * sizeof(issuerecord));
+	time(&rawtime2);			/* Fetching current system date and time in seconds */
+
+	if(borrow == STUDENT)
+	{	fp = fopen("studentrecord.txt", "r");
+		tolerance = ST_DAYS + ST_TOLERANCE;
+	}
+	else if(borrow == FACULTY)
+	{	fp = fopen("facultyrecord.txt", "r");
+		tolerance = FAC_DAYS + FAC_TOLERANCE;
+	}
+	if(!fp)
+		return NULL;
+
+	fgets(st, 1028, fp);			/* To read first line of file mentioning column names and discard it */		
+	while(fgets(st, 1028, fp) != NULL)
+	{
+		mysscanf2(st, &s);
+		if(strcmp(s.record.status, "issued") == 0)
+		{
+			t1.tm_mday = s.record.bor_date.date;		/* Storing borrow date */
+			t1.tm_mon = s.record.bor_date.month - 1;
+			t1.tm_year = s.record.bor_date.year - 1900;
+			t1.tm_hour = t1.tm_min = t1.tm_sec = 0;
+			rawtime1 = mktime(&t1);			/* Converting borrow date into seconds */
+
+			diff = difftime(rawtime2, rawtime1);	/* Difference between today's date and borrow date in seconds */
+			if(diff > (tolerance * (60 * 60 * 24)))
+				b[((*n)++)] = s;
+		}
+	}
+	fclose(fp);
+	return b;
+}
+
 int sortrec(int key, short borrow)			/* To sort student records according to student mis, book code or borrow date & time */
 {
-	borrower s[MAXSIZE];
+	issuerecord s[MAXSIZE];
 	int cnt = 0, i = 0, j = 0, n = 0;
 	FILE *fp;
 	char str[1028];
@@ -664,20 +715,14 @@ int sortrec(int key, short borrow)			/* To sort student records according to stu
 	return 1;			
 }
 
-void displayrec(borrower *s)			/* To display a student record on screen */
-{
-	printf("%d\t%s\t%s\t%d\t%d %d %d\t%d:%d\t%s\t%d %d %d\t%d:%d\n", s->mis, s->name, s->department, s->bookcode, s->record.bor_date.date, s->record.bor_date.month, s->record.bor_date.year, s->record.bor_timing.hours, s->record.bor_timing.mins, s->record.status, s->record.ret_date.date, s->record.ret_date.month, s->record.ret_date.year, s->record.ret_timing.hours, s->record.ret_timing.mins);
-	return;
-}
-
-int myfprintf2(FILE *fp, borrower *s)		/* To write student record in student records' file */
+int myfprintf2(FILE *fp, issuerecord *s)		/* To write student record in student records' file */
 {
 	int m;
 	m = fprintf(fp, "%d\t%s\t%s\t%d\t%d %d %d\t%d:%d\t%s\t%d %d %d\t%d:%d\n", s->mis, s->name, s->department, s->bookcode, s->record.bor_date.date, s->record.bor_date.month, s->record.bor_date.year, s->record.bor_timing.hours, s->record.bor_timing.mins, s->record.status, s->record.ret_date.date, s->record.ret_date.month, s->record.ret_date.year, s->record.ret_timing.hours, s->record.ret_timing.mins);
 	return m;
 }
 
-int mysscanf2(char *st, borrower *s)		/*To read from char array containing a line red from file into student variable pointed by s*/
+int mysscanf2(char *st, issuerecord *s)		/*To read from char array containing a line red from file into student variable pointed by s*/
 {
 	int m;
 	char *str[15];
@@ -714,9 +759,9 @@ int mysscanf2(char *st, borrower *s)		/*To read from char array containing a lin
 	return m;
 }
 
-void swapstud(borrower *s, int i, int j)			/* To swap two student records in an array.. Used in sorting */
+void swapstud(issuerecord *s, int i, int j)			/* To swap two student records in an array.. Used in sorting */
 {
-	borrower tmp;
+	issuerecord tmp;
 	tmp = s[i];
 	s[i] = s[j];
 	s[j] = tmp;

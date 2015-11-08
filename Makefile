@@ -1,5 +1,5 @@
 project: libmanagement.o uselibmanagement.o
-	cc libmanagement.o uselibmanagement.o -o project
+	cc libmanagement.o uselibmanagement.o -lncurses -Wall -o project
 
 libmanagement.o : libmanagement.c libmanagement.h
 		cc -c libmanagement.c

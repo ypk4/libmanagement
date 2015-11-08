@@ -1,0 +1,8 @@
+MIS	Name	Dept	Bookcode	Borrow Date	Time	Status	Due/Return Date	Time
+111403001	Anuj Mahajan	Comp	57	8 11 2015	9:15	returned	8 11 2015	9:19
+111501035	Pankaj Roy	Civil	35	8 11 2015	9:49	issued	18 11 2015	0:0
+111409029	Rohit Sharma	Instru	13	8 11 2015	9:50	returned	8 11 2015	11:31
+111508062	Ishwar Singh	IT	13	8 11 2015	9:51	issued	18 11 2015	0:0
+111305011	Sudeep Deshmukh	Elect	74	8 11 2015	9:53	issued	18 11 2015	0:0
+111507042	Prasanna Wartikar	Entc	13	8 11 2015	9:54	issued	18 11 2015	0:0
+111510017	Rohini Sonawane	Mech	35	8 11 2015	10:23	issued	18 11 2015	0:0

@@ -1,0 +1,7 @@
+MIS	Name	Dept	Bookcode	Borrow Date	Time	Status	Due/Return Date	Time
+134	Mr P.R.Kshirsagar	Math	15	8 11 2015	9:45	issued	16 2 2016	0:0
+215	Mrs P.L.Palande	Mech	115	8 11 2015	9:47	issued	16 2 2016	0:0
+739	Ms Pooja Agarwal	Entc	90	8 11 2015	9:56	issued	16 2 2016	0:0
+135	Mr P.Javalkoti	Phy	7	8 11 2015	10:16	issued	16 2 2016	0:0
+137	Mrs Kalpana Pandit	Math	15	8 11 2015	10:18	issued	16 2 2016	0:0
+367	Mr R.L.Tiwari	Comp	49	8 11 2015	10:20	issued	16 2 2016	0:0
