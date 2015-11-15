@@ -31,6 +31,7 @@
 #define BORROW 2
 #define NAME 3
 #define BOOKCODE_ISSUED 4
+#define MIS_ISSUED 5
 
 #define STUDENT 1
 #define FACULTY 2

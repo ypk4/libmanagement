@@ -333,7 +333,7 @@ int addissue(issuerecord *s, short borrow)				/* To add new book issue record fr
 	var.integer = s->mis;
 	if(borrow == STUDENT)
 	{
-		p = search_record(var, MIS, STUDENT, &number);
+		p = search_record(var, MIS_ISSUED, STUDENT, &number);
 		if(number >= ST_BOOKS)		/* If borrower already has issued max no of permissible books */
 		{
 			free(p);			
@@ -526,6 +526,11 @@ issuerecord* search_record(union int_or_str var, int state, short borrow, int *n
 		if(state == MIS)
 		{
 			if(s->mis == var.integer)
+				b[(*num)++] = *s;
+		}
+		else if(state == MIS_ISSUED)
+		{
+			if((s->mis == var.integer) && (strcmp((s->record).status, "issued") == 0))
 				b[(*num)++] = *s;
 		}	
 		else if(state == BOOKCODE)

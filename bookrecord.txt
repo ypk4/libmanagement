@@ -1,11 +1,12 @@
 Code				Title				Author	Subject	Price	ShelfNo	Copies
-49	The C Programming Language, Prentice Hall of India 2nd Edition	B Kernighen, D Ritchie	Programming	475	43	45
+49	The C Programming Language, Prentice Hall of India 2nd Edition	B Kernighen, D Ritchie	C Programming	475	43	45
 74	Basic Electrical Engineering, Nirali Prakashan	B.H.Deshmukh	Electrical	500	57	17
 15	Higher Engineering Mathematics, Tata McGraw Hill	B.V.Ramana	Mathematics	850	13	18
 13	Advanced Engineering Mathematics, Wiley Eastern Ltd	Erwin Kreyszig	Mathematics	780	12	28
-57	Fundamentals of Data Structures in C, Univ Press 2nd Edition	Horowitz, Sahni, Anderson-freed	Programming	650	46	23
-23	Discrete Mathematics and Applications, Tata McGraw Hill 5th Ed	Kenneth H Rosen	Mathematics	760	25	19
+57	Fundamentals of Data Structures in C, Univ Press 2nd Edition	Horowitz, Sahni, Anderson-freed	Data Structures	650	46	23
+23	Discrete Mathematics and Applications, Tata McGraw Hill 5th Ed	Kenneth H Rosen	Mathematics	760	25	60
 7	Textbook of Engineering Physics, S.Chand Publications	Kshirsagar, Avadhanulu	Physics	550	3	29
 90	Digital Design, Prentice Hall 3rd Edition	M Morris Mano	Electronics	520	71	8
 115	Engineering Thermodynamics, Tata McGraw Hill, 3rd Edition	P K Nag	Mechanical	620	93	10
-35	Engineering Mechanics, Techmax Publications	Sanju Unadkat	Civil	545	31	30
+35	Engineering Mechanics, Techmax Publications	Sanju Unadkat	Civil	545	31	31
+11	Engineering Chemistry, S.Chand	Jain	Chemistry	700	10	30

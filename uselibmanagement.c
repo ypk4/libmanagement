@@ -46,7 +46,7 @@ int main()
 				
 	Label:
 	touchwin(stdscr);
-	printw("-----------------------------------------------------------------------------------------------------------\n");
+	printw("------------------------------------------------------------------------------------------------------------------\n");
 	refresh();
 	printw("Login as:\n1. Librarian\t2. Student\t3. Faculty\t4. Quit application\n");
 	refresh();
@@ -68,17 +68,18 @@ int main()
 				while(1)
 				{
 					Label_1:
-					wprintw(vin, "-------------------------------------------------------------------------------------------------------------\n");
+					wprintw(vin, "\n---------------------------------------------------------------------------------------------------------------------\n");
 					wprintw(vin, "Enter the record which is to be managed\n");
 					wprintw(vin, "1. Book record  \t2. Student record\t3. Faculty record\t4. Log out session\n");
 					wscanw(vin, "%d", &choice);
 					switch(choice)
 					{
 						case 1:
+							wprintw(vin, "\n------------------------------------------------------------------------------------------------------------------\nWelcome to book managing...");
 							while(1)
 							{
 								Label_2:
-								wprintw(vin, "---------------------------------------------------------------------------------------------------------------\n");
+								wprintw(vin, "\n------------------------------------------------------------------------------------------------------------------\n");
 								wprintw(vin, "x. Add new book record \ty. Search book \tz. Edit number of copies of existing book\t");	
 								wprintw(vin, "u. Sort book records\n\tt. Delete a book\tv. Go to library management stage\tw.Log out session\n");			
 								wscanw(vin, " %c", &ch);
@@ -106,7 +107,7 @@ int main()
 											break;
 							
 									case 'y' :	wprintw(vin, "Search according to:\n");
-											wprintw(vin, "a. Title\tb. Author\tc. Subject Category\td. Code\t  e. Go to book record managing\tf. Go to library management\n");			
+											wprintw(vin, "a. Title\tb. Author\tc. Subject Category\td. Code\t  e. Go to book record managing\t f. Go to library management\n");			
 											wscanw(vin, " %c", &ch2);
 											switch(ch2)
 											{
@@ -235,11 +236,14 @@ int main()
 							}
 							break;
 		
-						case 2:
-						case 3:
+						case 2:	
+						case 3:	if(choice == 2)
+								wprintw(vin, "\n----------------------------------------------------------------------------------------------------------------------\nWelcome to student record managing...");					
+							if(choice == 3)
+								wprintw(vin, "\n----------------------------------------------------------------------------------------------------------------------\nWelcome to faculty record managing...");					
 							while(1)
 							{
-								wprintw(vin, "--------------------------------------------------------------------------------------------------------------\n");
+								wprintw(vin, "\n----------------------------------------------------------------------------------------------------------------------\n");
 								wprintw(vin, "x. Add new issue record\t  y. Search an issue record\t ");
 								wprintw(vin, "z. Edit issued book record on returning\t u. Sort issue records\n\tt. Display long-time issue records\tv. Go to library managing\tw. Log out session\n");
 								wscanw(vin, " %c", &ch);
@@ -269,7 +273,7 @@ int main()
 												wprintw(vin, "Book code does not exist\n");
 											break;
 			
-									case 'y':	wprintw(vin, "Search according to:\na. Student  mis\tb. Book code\tc. Book code with status \"issued\"\td. Student/faculty name\n");
+									case 'y':	wprintw(vin, "Search according to:\na. Student  mis\t b. Book code\tc. Book code with status \"issued\"\td. Student/faculty name\t e. Student mis and status \"issued\"\n");
 											wscanw(vin, " %c", &ch2);
 											switch(ch2)
 											{
@@ -344,7 +348,21 @@ int main()
 														free(s);
 														break;
 
-	
+												case 'e':	wprintw(vin, "Enter student/faculty mis\n");
+														wscanw(vin, "%d", &(var.integer));
+														s = search_record(var, MIS_ISSUED, STUDENT, &number);												
+														if(!s)
+														{
+															wprintw(vin, "No matching issue record found\n");			
+															break;
+														}
+														wprintw(vin, "MIS\t\tName\tDept\tBookcode\tBorrow Date\t");	
+														wprintw(vin, "Time\tStatus\tDue/Return Date\tTime\n");		
+														for(i = 0; i < number; i++)
+															displayrec(&s[i], vin);
+														free(s);
+														break;
+
 												default :	break;
 											}
 											break;
@@ -378,9 +396,9 @@ int main()
 											if(number == 0)
 												wprintw(vin, "No long time borrowers :)\n");
 											else
-												wprintw(vin, "MIS\t\tName\tDept\tBookcode\tBorrow Date\tTime\tStatus\tDue/Return Date\tTime\n");			
+												wprintw(vin, "Long time borrowers :\nMIS\t\tName\tDept\tBookcode\tBorrow Date\tTime\tStatus\tDue/Return Date\tTime\n");			
 											for(i = 0; i < number; i++)
-												displayrec(s, vin);
+												displayrec(&s[i], vin);
 											free(s);
 											break;
 	
@@ -469,86 +487,81 @@ int main()
 				while(1)
 				{
 					Label_3:
-					wprintw(vin, "----------------------------------------------------------------------------------------------------------------\n");
-					wprintw(vin, "----------------------------------------------------------------------------------------------------------------\n");
-					wprintw(vin, "x. Search book\ty. Sort book records\tz. Search issue records\n\tu. Sort issue records\tv.Log out session\n");			
+					wprintw(vin, "\n----------------------------------------------------------------------------------------------------------------------------\n");
+					wprintw(vin, "x. Search book\ty. Sort book records\tz. Search issue records\n\tu. Sort issue records\t v.Log out session\n");			
 					wscanw(vin, " %c", &ch);
 					switch(ch)
 					{
-						case 'x':	while(1)
+						case 'x':	wprintw(vin, "Search book according to:\n");
+								wprintw(vin, "a. Title\tb. Author\tc. Subject Category\td. Code\t e. Go to previous stage\n");			
+								wscanw(vin, " %c", &ch2);
+								switch(ch2)
 								{
-									wprintw(vin, "----------------------------------------------------------------------------------------------------------------\n");
-									wprintw(vin, "Search book according to:\n");
-									wprintw(vin, "a. Title\tb. Author\tc. Subject Category\td. Code\te. Go to previous stage\n");			
-									wscanw(vin, " %c", &ch2);
-									switch(ch2)
-									{
-										case 'a' :	wprintw(vin, "Enter title\n");
-												wscanw(vin, " %[^\n]s", var.str);	
-												p = searchbook(TITLE, var, &number);	
-												if(!p)
-												{	wprintw(vin, "No records found\n");
-													break;
-												}
-												wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
-												wprintw(vin, "Price\tShelfNo\tCopies\n");
-												for(i = 0; i < number; i++)
-													display(&p[i], vin);
-												free(p);
+									case 'a' :	wprintw(vin, "Enter title\n");
+											wscanw(vin, " %[^\n]s", var.str);	
+											p = searchbook(TITLE, var, &number);	
+											if(!p)
+											{	wprintw(vin, "No records found\n");
 												break;
-				
-										case 'b' :	wprintw(vin, "Enter author\n");
-												wscanw(vin, " %[^\n]s", var.str);	
-												p = searchbook(AUTHOR, var, &number);	
-												if(!p)
-												{	wprintw(vin, "No records found\n");
-													break;
-												}
-												wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
-												wprintw(vin, "Price\tShelfNo\tCopies\n");
-												for(i = 0; i < number; i++)
-													display(&p[i], vin);
-												free(p);
-												break;
-				
-										case 'c' :	wprintw(vin, "Enter Subject category\n");
-												wscanw(vin, " %[^\n]s", var.str);	
-												p = searchbook(SUBJECT, var, &number);	
-												if(!p)
-												{	wprintw(vin, "No records found\n");
-													break;
-												}											
-												wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
-												wprintw(vin, "Price\tShelfNo\tCopies\n");
-												for(i = 0; i < number; i++)
+											}
+											wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
+											wprintw(vin, "Price\tShelfNo\tCopies\n");
+											for(i = 0; i < number; i++)
 												display(&p[i], vin);
-												free(p);
-												break;
+											free(p);
+											break;
 				
-										case 'd' :	wprintw(vin, "Enter book code\n");	
-												wscanw(vin, "%d", &(var.integer));
-												p = searchbook(CODE, var, &number);	
-												if(!p)
-												{	wprintw(vin, "No records found\n");
-														break;
-												}
+									case 'b' :	wprintw(vin, "Enter author\n");
+											wscanw(vin, " %[^\n]s", var.str);	
+											p = searchbook(AUTHOR, var, &number);	
+											if(!p)
+											{	wprintw(vin, "No records found\n");
+												break;
+											}
+											wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
+											wprintw(vin, "Price\tShelfNo\tCopies\n");
+											for(i = 0; i < number; i++)
+												display(&p[i], vin);
+											free(p);
+											break;
+				
+									case 'c' :	wprintw(vin, "Enter Subject category\n");
+											wscanw(vin, " %[^\n]s", var.str);	
+											p = searchbook(SUBJECT, var, &number);	
+											if(!p)
+											{	wprintw(vin, "No records found\n");
+												break;
+											}											
+											wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
+											wprintw(vin, "Price\tShelfNo\tCopies\n");
+											for(i = 0; i < number; i++)
+												display(&p[i], vin);
+											free(p);
+											break;
+				
+									case 'd' :	wprintw(vin, "Enter book code\n");	
+											wscanw(vin, "%d", &(var.integer));
+											p = searchbook(CODE, var, &number);	
+											if(!p)
+											{	wprintw(vin, "No records found\n");
+													break;
+											}
 
-												wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
-												wprintw(vin, "Price\tShelfNo\tCopies\n");
-												for(i = 0; i < number; i++)
-													display(&p[i], vin);
-												free(p);
-												break;
+											wprintw(vin, "Code\t\t\t\tTitle\t\t\t\tAuthor\tSubject\t");
+											wprintw(vin, "Price\tShelfNo\tCopies\n");
+											for(i = 0; i < number; i++)
+												display(&p[i], vin);
+											free(p);
+											break;
 		
-										case 'e' :	goto Label_3;
-												break;
+									case 'e' :	goto Label_3;
+											break;
 		
-										default :	break;
-									}
+									default :	break;
 								}
 								break;
 
-						case 'y':	wprintw(vin, "Sort according to:\n");
+						case 'y':	wprintw(vin, "Sort books according to:\n");
 								wprintw(vin, "a. Book code\tb. Subject\tc. Author\td. Shelf number\n");	
 								wscanw(vin, " %c", &ch2);	
 								switch(ch2)
@@ -573,7 +586,7 @@ int main()
 								}
 								break;
 
-						case 'z':	wprintw(vin, "Search according to Book code with status \"issued\"\n\t");
+						case 'z':	wprintw(vin, "Search issue record according to Book code with status \"issued\"\n\t");
 								wprintw(vin, "Enter book code\n");	
 								wscanw(vin, "%d", &(var.integer));
 								if(choice2 == 2)
